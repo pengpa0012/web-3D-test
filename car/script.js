@@ -15,16 +15,11 @@ scene.add( light )
 
 const controls = new OrbitControls( camera, renderer.domElement )
 
-camera.position.set( 0, 20, 100 )
+camera.position.set( 10, 5, 10 )
 controls.update()
 
-camera.position.z = 8
 document.body.appendChild(renderer.domElement)
 
-/**
- * 
- * @param {string} path 
- */ 
 function loadModel(path) {
 	loader.load(
 		`assets/${path}`,
@@ -64,6 +59,6 @@ const loadBtn = document.querySelector(".load-btn")
 loadBtn.addEventListener("click", () => {
 	loadModel("car-3/scene.gltf")
 	animate()
+	loadBtn.classList.add("hidden")
 })
-
 
