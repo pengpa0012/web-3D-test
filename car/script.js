@@ -19,16 +19,17 @@ const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 2000)
 const loader = new GLTFLoader()
 
+
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 
-const light = new THREE.AmbientLight( 0xffffff, 20 )
-scene.add( light )
+const light = new THREE.DirectionalLight(0xffffff, 10)
+scene.add(light)
 
 
-const controls = new OrbitControls( camera, renderer.domElement )
+const controls = new OrbitControls(camera, renderer.domElement)
 
-camera.position.set( 10, 5, 10 )
+camera.position.set(10, 5, 10)
 controls.update()
 
 document.body.appendChild(renderer.domElement)
@@ -36,8 +37,8 @@ document.body.appendChild(renderer.domElement)
 function loadModel(path) {
 	loader.load(
 		`assets/${path}`,
-		function ( gltf ) {
-			scene.add( gltf.scene )
+		function (gltf) {
+			scene.add(gltf.scene)
 			gltf.animations // Array<THREE.AnimationClip>
 			gltf.scene // THREE.Group
 			gltf.scenes // Array<THREE.Group>
@@ -45,10 +46,10 @@ function loadModel(path) {
 			gltf.asset // Object
 
 		},
-		function ( xhr ) {
-			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+		function (xhr) {
+			console.log( (xhr.loaded / xhr.total * 100) + '% loaded')
 		},
-		function ( error ) {
+		function (error) {
 			console.log(error)
 		}
 	)
@@ -77,6 +78,7 @@ loadBtn.forEach(el => {
 			scene.remove(el.children[1])
 		})
 		loadModel(el.attributes["id"].value)
+		camera.position.set( 10, 5, 10 )
 		animate()
 	})
 })

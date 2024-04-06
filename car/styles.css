@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body {
+  background: black;
+}
+
 .btn-group {
   position: fixed;
   top: 100px;
