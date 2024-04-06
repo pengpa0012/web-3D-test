@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: black;
+}
+
+.btn-group {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.load-btn, .cancel {
+  background: transparent;
+  backdrop-filter: blur(10px);
+  color: white;
+  width: 300px;
+  height: 150px;
+  border: solid 1px #eee;
+}
