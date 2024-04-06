@@ -10,14 +10,18 @@ body {
 
 .btn-group {
   position: fixed;
-  top: 100px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
 }
 
-.load-btn {
-  background: white;
-  color: black;
+.load-btn, .cancel {
+  background: transparent;
+  backdrop-filter: blur(10px);
+  color: white;
+  width: 300px;
+  height: 150px;
+  border: solid 1px #eee;
 }

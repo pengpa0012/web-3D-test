@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
+let ticker
 
 // generate button for loading models
 const btnGroup = document.querySelector(".btn-group")
@@ -9,7 +10,7 @@ const MODELS = ["car-1/scene.gltf","car-2/scene.gltf","car-3/scene.gltf","car-4/
 
 MODELS.forEach(el => {	
 	const btn = document.createElement("button")
-	btn.classList = "border rounded-md py-2 px-4 load-btn"
+	btn.classList = "rounded-md py-2 px-4 load-btn"
 	btn.setAttribute("id", el)
 	btn.textContent = el.split("/")[0].replace("-", " ").toUpperCase()
 	btnGroup.append(btn)
@@ -57,8 +58,9 @@ function loadModel(path) {
 
 
 function animate() {
-	requestAnimationFrame(animate)
+	ticker = requestAnimationFrame(animate)
 	controls.update()
+	console.log("yeye")
 	renderer.render(scene, camera)
 }
 
@@ -83,3 +85,8 @@ loadBtn.forEach(el => {
 	})
 })
 
+// const cancelBtn = document.querySelector(".cancel")
+
+// cancelBtn.addEventListener("click", () => {
+// 	cancelAnimationFrame(ticker)
+// })
