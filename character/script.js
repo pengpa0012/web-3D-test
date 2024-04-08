@@ -3,17 +3,16 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
 let action, 
-		mixer, 
-		clock = new THREE.Clock(), 
-		isMoving, 
-		animations,
-		character
+    mixer, 
+    clock = new THREE.Clock(), 
+    isMoving = { w: false, a: false, s: false, d: false }, 
+    animations,
+    character
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xffffff)
 const camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 0.1, 2000)
 const loader = new GLTFLoader()
-
 
 const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -22,8 +21,7 @@ const light = new THREE.AmbientLight(0xffffff, 5)
 scene.add(light)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-
-camera.position.set(10, 5, 10)
+camera.position.set(10, 10, 0)
 controls.update()
 
 document.body.appendChild(renderer.domElement)
@@ -38,26 +36,44 @@ loader.load(
 		animations = gltf.animations
 		character = gltf.scene
 		scene.add(gltf.scene)
-		gltf.animations // Array<THREE.AnimationClip>
-		gltf.scene // THREE.Group
-		gltf.scenes // Array<THREE.Group>
-		gltf.cameras // Array<THREE.Camera>
-		gltf.asset // Object
 	},
 	function (xhr) {
-		console.log( (xhr.loaded / xhr.total * 100) + '% loaded')
+		console.log((xhr.loaded / xhr.total * 100) + '% loaded')
 	},
 	function (error) {
 		console.log(error)
 	}
 )
 
+const movementSpeed = 0.75
+const movementVector = new THREE.Vector3()
+const rotationSpeed = 0.0001
+
 function animate() {
 	requestAnimationFrame(animate)
 	controls.update()
 	let delta = clock.getDelta()
-	if (mixer && isMoving) mixer.update(delta)
+	if (mixer && (isMoving.w || isMoving.a || isMoving.s || isMoving.d)) {
+			mixer.update(delta)
+			updateCharacterPosition(delta)
+	}
 	renderer.render(scene, camera)
+}
+
+function updateCharacterPosition(delta) {
+	movementVector.set(0, 0, 0)
+
+	if (isMoving.w) movementVector.z += movementSpeed
+	if (isMoving.s) movementVector.z -= movementSpeed
+	if (isMoving.a) movementVector.x += movementSpeed
+	if (isMoving.d) movementVector.x -= movementSpeed
+
+	if (movementVector.lengthSq() > 0) {
+		character.lookAt(character.position.clone().add(movementVector))
+	}
+
+	movementVector.normalize().multiplyScalar(movementSpeed * delta)
+	character.position.add(movementVector)
 }
 
 window.addEventListener("resize", () => {
@@ -67,30 +83,15 @@ window.addEventListener("resize", () => {
 })
 
 window.addEventListener("keydown", e => {
-	if(e.key == "w" || e.key == "a" || e.key == "s" || e.key == "d") {
-		isMoving = true
+	if (e.key === "w" || e.key === "a" || e.key === "s" || e.key === "d") {
+		isMoving[e.key] = true
 	}
-
-	if(e.key == "w") {
-		character.position.z += 0.01
-	}
-
-	if(e.key == "s") {
-		character.position.z -= 0.01
-	}
-
-	if(e.key == "a") {
-		character.position.x += 0.01
-	}
-
-	if(e.key == "d") {
-		character.position.x -= 0.01
-	}
-	
 })
 
-window.addEventListener("keyup", () => {
-	isMoving = false
+window.addEventListener("keyup", e => {
+	if (e.key === "w" || e.key === "a" || e.key === "s" || e.key === "d") {
+		isMoving[e.key] = false
+	}
 })
 
 animate()
