@@ -24,6 +24,12 @@ const controls = new OrbitControls(camera, renderer.domElement)
 camera.position.set(10, 10, 0)
 controls.update()
 
+const geometry = new THREE.PlaneGeometry(50, 50)
+const material = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide})
+const plane = new THREE.Mesh(geometry, material)
+plane.rotation.x = Math.PI / 2
+scene.add(plane)
+
 document.body.appendChild(renderer.domElement)
 
 loader.load(
@@ -47,7 +53,6 @@ loader.load(
 
 const movementSpeed = 0.75
 const movementVector = new THREE.Vector3()
-const rotationSpeed = 0.0001
 
 function animate() {
 	requestAnimationFrame(animate)
