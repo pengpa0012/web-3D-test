@@ -24,10 +24,14 @@ const controls = new OrbitControls(camera, renderer.domElement)
 camera.position.set(10, 10, 0)
 controls.update()
 
+const map = new THREE.TextureLoader().load( "./assets/floor/map.jpg" );
+const texture = new THREE.TextureLoader().load( "./assets/floor/texture.png" );
+
 const geometry = new THREE.PlaneGeometry(50, 50)
-const material = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide})
+const material = new THREE.MeshBasicMaterial({color: new THREE.Color("#eee"), side: THREE.DoubleSide, map, alphaMap: texture})
 const plane = new THREE.Mesh(geometry, material)
 plane.rotation.x = Math.PI / 2
+plane.position.y = -0.03
 scene.add(plane)
 
 document.body.appendChild(renderer.domElement)
