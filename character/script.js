@@ -6,7 +6,8 @@ let action,
 		mixer, 
 		clock = new THREE.Clock(), 
 		isMoving, 
-		animations
+		animations,
+		character
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xffffff)
@@ -35,6 +36,7 @@ loader.load(
 		action = mixer.clipAction(clip)
 		action.play()
 		animations = gltf.animations
+		character = gltf.scene
 		scene.add(gltf.scene)
 		gltf.animations // Array<THREE.AnimationClip>
 		gltf.scene // THREE.Group
@@ -54,7 +56,7 @@ function animate() {
 	requestAnimationFrame(animate)
 	controls.update()
 	let delta = clock.getDelta()
-	if (mixer && isMoving) mixer.update( delta )
+	if (mixer && isMoving) mixer.update(delta)
 	renderer.render(scene, camera)
 }
 
@@ -68,6 +70,23 @@ window.addEventListener("keydown", e => {
 	if(e.key == "w" || e.key == "a" || e.key == "s" || e.key == "d") {
 		isMoving = true
 	}
+
+	if(e.key == "w") {
+		character.position.z += 0.01
+	}
+
+	if(e.key == "s") {
+		character.position.z -= 0.01
+	}
+
+	if(e.key == "a") {
+		character.position.x += 0.01
+	}
+
+	if(e.key == "d") {
+		character.position.x -= 0.01
+	}
+	
 })
 
 window.addEventListener("keyup", () => {
